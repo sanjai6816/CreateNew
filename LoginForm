@@ -1,0 +1,78 @@
+package UserLogin;
+
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+public class LoginForm {
+
+	//public Main() {
+		// TODO Auto-generated constructor stub
+	//}
+
+		public static void main(String args[]) {
+			JFrame frame = new JFrame("Login");
+			frame.setVisible(true);
+			frame.setLayout(null);
+//			frame.setLayout(new GridLayout(3,1,10,10));
+			frame.setSize(400,800);
+			
+			JLabel Uname=new JLabel("UserName");
+			JTextField Name=new JTextField();
+			Name.setBounds(100,100, 200, 40);
+			Uname.setBounds(100, 60, 100, 20);
+			frame.add(Uname);
+			frame.add(Name);
+			JLabel Nu=new JLabel("Phone number");
+			JTextField Phno=new JTextField();
+			Phno.setBounds(100, 200, 200, 40);
+			Nu.setBounds(100, 165, 100,40);
+			frame.add(Phno);
+			frame.add(Nu);
+			JLabel email=new JLabel("Email");
+			JTextField em=new JTextField();
+			email.setBounds( 100, 280, 200, 20);
+			em.setBounds(100, 300, 200, 40);
+			frame.add(em);
+			frame.add(email);
+			JButton button=new JButton("Submit");
+			button.setBounds(50, 400, 100, 30);
+			frame.add(button);
+			button.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					try {
+						Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/demo","root","Sanjai@1234");
+						String name = Name.getText();
+						String pass = Phno.getText();
+						String qurry = "insert into userdata (username,password) values(?,?)";
+						PreparedStatement p = connection.prepareStatement(qurry);
+						p.setString(1, name);
+						p.setString(2, pass);
+						int r = p.executeUpdate();
+						
+						if(r>0) {
+							JOptionPane.showMessageDialog(frame, "Success");
+						} else {
+							JOptionPane.showMessageDialog(frame, "Failed");
+						}
+					} catch (SQLException ex) {
+						ex.printStackTrace();
+					}
+				}
+			});
+			
+		}
+}
